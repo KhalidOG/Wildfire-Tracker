@@ -1,8 +1,10 @@
 import { useState } from "react";
 import useWildfires from "./hooks/useWildfires";
 import Map from "./components/Map";
-import FilterPanel from "./components/FilterPanel";
+import Sidebar from "./components/Sidebar";
+import LoadingSpinner from "./components/LoadingSpinner";
 import filterEvents from "./utils/filterEvents";
+import styles from "./App.module.css";
 
 const DEFAULT_FILTERS = {
   status: "all",
@@ -17,13 +19,15 @@ const App = () => {
   const filteredEvents = filterEvents(wildfireEvents, filters);
 
   return (
-    <div style={{ height: "100vh", width: "100vw", display: "flex" }}>
-      <FilterPanel filters={filters} onFiltersChange={setFilters} />
+    <div className={styles.appLayout}>
+      <Sidebar
+        filters={filters}
+        onFiltersChange={setFilters}
+        errorMessage={errorMessage}
+      />
 
-      <div style={{ flex: 1 }}>
-        {isLoading && <p>Loading wildfire events...</p>}
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-        {!isLoading && !errorMessage && <Map wildfireEvents={filteredEvents} />}
+      <div className={styles.mapArea}>
+        {isLoading ? <LoadingSpinner /> : <Map wildfireEvents={filteredEvents} />}
       </div>
     </div>
   );
