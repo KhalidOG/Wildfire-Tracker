@@ -1,49 +1,103 @@
 import { useState, useEffect } from "react";
 
-const EONET_WILDFIRES_URL =
-  "https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires&status=open&days=20";
+const FIRMS_MAP_KEY = import.meta.env.VITE_FIRMS_MAP_KEY;
+const FIRMS_SOURCE = "VIIRS_SNPP_NRT";
+const CANADA_BOUNDING_BOX = "-141,41,-52,84";
+const DAY_RANGE = 3;
 
-const fetchWildfireEvents = async () => {
-  const response = await fetch(EONET_WILDFIRES_URL);
+const FIRMS_AREA_URL = `https://firms.modaps.eosdis.nasa.gov/api/area/csv/${FIRMS_MAP_KEY}/${FIRMS_SOURCE}/${CANADA_BOUNDING_BOX}/${DAY_RANGE}`;
 
-  if (!response.ok) {
-    throw new Error(`EONET request failed with status ${response.status}`);
+const parseCsv = (csvText) => {
+  const rows = csvText.trim().split("\n");
+
+  if (rows.length < 2) {
+    return [];
   }
 
-  const wildfireData = await response.json();
-  return wildfireData.events;
+  const headers = rows[0].split(",");
+
+  return rows.slice(1).map((row) => {
+    const values = row.split(",");
+    const rowObject = {};
+
+    headers.forEach((header, index) => {
+      rowObject[header.trim()] = values[index]?.trim();
+    });
+
+    return rowObject;
+  });
 };
 
-const hasValidCoordinates = (coordinates) => {
+const fetchFireDetections = async () => {
+  if (!FIRMS_MAP_KEY) {
+    throw new Error(
+      "Missing FIRMS API key. Add VITE FIRMS MAP KEY to the .env file."
+    );
+  }
+
+  const response = await fetch(FIRMS_AREA_URL);
+
+  if (!response.ok) {
+    throw new Error(`FIRMS request failed with status ${response.status}`);
+  }
+
+  const csvText = await response.text();
+  return parseCsv(csvText);
+};
+
+const hasValidCoordinates = (latitude, longitude) => {
   return (
-    Array.isArray(coordinates) &&
-    coordinates.length === 2 &&
-    typeof coordinates[0] === "number" &&
-    typeof coordinates[1] === "number"
+    latitude !== undefined &&
+    longitude !== undefined &&
+    !Number.isNaN(Number(latitude)) &&
+    !Number.isNaN(Number(longitude))
   );
 };
 
-const normalizeWildfireEvent = (rawEvent) => {
-  if (!rawEvent.geometry || rawEvent.geometry.length === 0) {
+const CONFIDENCE_LABELS = {
+  l: "low",
+  n: "nominal",
+  h: "high",
+};
+
+const normalizeConfidence = (confidenceCode) => {
+  return CONFIDENCE_LABELS[confidenceCode] ?? confidenceCode;
+};
+
+const buildIsoDate = (acquisitionDate, acquisitionTime) => {
+  const paddedTime = (acquisitionTime ?? "").padStart(4, "0");
+  const hours = paddedTime.slice(0, 2);
+  const minutes = paddedTime.slice(2, 4);
+  return `${acquisitionDate}T${hours}:${minutes}:00Z`;
+};
+
+const normalizeFireDetection = (rawDetection) => {
+  const {
+    latitude,
+    longitude,
+    acq_date: acquisitionDate,
+    acq_time: acquisitionTime,
+    confidence,
+    bright_ti4: brightness,
+    frp: firePower,
+    daynight,
+  } = rawDetection;
+
+  if (!hasValidCoordinates(latitude, longitude)) {
     return null;
   }
-
-  const latestGeometry = rawEvent.geometry[rawEvent.geometry.length - 1];
-
-  if (!hasValidCoordinates(latestGeometry.coordinates)) {
-    return null;
-  }
-
-  const [longitude, latitude] = latestGeometry.coordinates;
-  const sourceUrl = rawEvent.sources?.[0]?.url ?? rawEvent.link;
 
   return {
-    id: rawEvent.id,
-    title: rawEvent.title,
-    date: latestGeometry.date,
-    coordinates: { latitude, longitude },
-    status: rawEvent.closed ? "closed" : "open",
-    sourceUrl,
+    id: `${latitude}-${longitude}-${acquisitionDate}-${acquisitionTime}`,
+    coordinates: {
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+    },
+    date: buildIsoDate(acquisitionDate, acquisitionTime),
+    confidence: normalizeConfidence(confidence),
+    brightness: Number(brightness),
+    firePower: Number(firePower),
+    isDaytime: daynight === "D",
   };
 };
 
@@ -53,31 +107,31 @@ const useWildfires = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    const loadWildfireEvents = async () => {
+    const loadFireDetections = async () => {
       setIsLoading(true);
       setErrorMessage(null);
 
       try {
-        const rawEvents = await fetchWildfireEvents();
+        const rawDetections = await fetchFireDetections();
 
-        if (!rawEvents || rawEvents.length === 0) {
+        if (!rawDetections || rawDetections.length === 0) {
           setWildfireEvents([]);
           return;
         }
 
-        const normalizedEvents = rawEvents
-          .map(normalizeWildfireEvent)
-          .filter((wildfireEvent) => wildfireEvent !== null);
+        const normalizedDetections = rawDetections
+          .map(normalizeFireDetection)
+          .filter((detection) => detection !== null);
 
-        setWildfireEvents(normalizedEvents);
+        setWildfireEvents(normalizedDetections);
       } catch (error) {
-        setErrorMessage(`Unable to load wildfire events: ${error.message}`);
+        setErrorMessage(`Unable to load wildfire data: ${error.message}`);
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadWildfireEvents();
+    loadFireDetections();
   }, []);
 
   return { wildfireEvents, isLoading, errorMessage };

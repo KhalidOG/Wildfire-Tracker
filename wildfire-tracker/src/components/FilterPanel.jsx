@@ -1,6 +1,6 @@
 const FilterPanel = ({ filters, onFiltersChange }) => {
-  const handleStatusChange = (event) => {
-    onFiltersChange({ ...filters, status: event.target.value });
+  const handleConfidenceChange = (event) => {
+    onFiltersChange({ ...filters, confidence: event.target.value });
   };
 
   const handleStartDateChange = (event) => {
@@ -16,11 +16,16 @@ const FilterPanel = ({ filters, onFiltersChange }) => {
       <h2>Filters</h2>
 
       <div>
-        <label htmlFor="statusFilter">Status</label>
-        <select id="statusFilter" value={filters.status} onChange={handleStatusChange}>
+        <label htmlFor="confidenceFilter">Confidence</label>
+        <select
+          id="confidenceFilter"
+          value={filters.confidence}
+          onChange={handleConfidenceChange}
+        >
           <option value="all">All</option>
-          <option value="open">Open</option>
-          <option value="closed">Closed</option>
+          <option value="low">Low</option>
+          <option value="nominal">Nominal</option>
+          <option value="high">High</option>
         </select>
       </div>
 

@@ -2,19 +2,21 @@ import { Marker, Popup } from "react-leaflet";
 import formatDate from "../utils/formatDate";
 
 const EventMarker = ({ wildfireEvent }) => {
-  const { title, date, coordinates, sourceUrl } = wildfireEvent;
+  const { coordinates, date, confidence, firePower, isDaytime } = wildfireEvent;
   const markerPosition = [coordinates.latitude, coordinates.longitude];
 
   return (
     <Marker position={markerPosition}>
       <Popup>
-        <strong>{title}</strong>
+        <strong>Fire Detection</strong>
         <br />
         {formatDate(date)}
         <br />
-        <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
-          View on EONET
-        </a>
+        Confidence: {confidence}
+        <br />
+        Fire radiative power: {firePower} MW
+        <br />
+        Detected: {isDaytime ? "Daytime" : "Nighttime"} satellite pass
       </Popup>
     </Marker>
   );
