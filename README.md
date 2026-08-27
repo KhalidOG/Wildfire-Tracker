@@ -99,12 +99,6 @@ Data Layer: The custom hook useWildfires - The raw CSV from FIRMS is obtained, p
 
 ---
 
-## Data Source & Attribution
-
-NASA's Fire Information for Resource Management System (FIRMS) supplies the data on fire detection; it is a part of NASA's Land, Atmosphere near real-time capability for EOS (LANCE). Map tiles are imported from contributors of OpenStreetMap. The project is not associated with or recognized by NASA in any form.
-
----
-
 ## Limitations
 
 **Functional**: No grouping of markers for crowded areas, no capability to see position of the user by tapping one button, and practically no history of fires
@@ -114,3 +108,11 @@ NASA's Fire Information for Resource Management System (FIRMS) supplies the data
 **Data**: The user has only three days to see history of a fire; since VIIRS is orbiting the Earth from pole to pole, it brings clouds and displays data only in certain areas in a day
 
 **UX**: No complete or sophisticated view either on desktop or a mobile.
+
+---
+
+## Data Source & Attribution
+
+NASA's Fire Information for Resource Management System (FIRMS) supplies the data on fire detection; it is a part of NASA's Land, Atmosphere near real-time capability for EOS (LANCE). Map tiles are imported from contributors of OpenStreetMap. The project is not associated with or recognized by NASA in any form.
+
+---
