@@ -107,8 +107,6 @@ Data Layer: The custom hook useWildfires - The raw CSV from FIRMS is obtained, p
 
 **Data**: The user has only three days to see history of a fire; since VIIRS is orbiting the Earth from pole to pole, it brings clouds and displays data only in certain areas in a day
 
-**UX**: No complete or sophisticated view either on desktop or a mobile.
-
 ---
 
 ## Data Source & Attribution
