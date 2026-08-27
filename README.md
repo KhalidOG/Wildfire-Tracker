@@ -81,15 +81,13 @@ Data Layer: The custom hook useWildfires - The raw CSV from FIRMS is obtained, p
    npm install
    ```
 
-3. Create a `.env` file in the project root (same level as `package.json`) and add your FIRMS API key:
+3. Create a `.env` file in the root and add your FIRMS API key:
 
    ```
    VITE_FIRMS_MAP_KEY=your_map_key_here
    ```
 
-   This file is git-ignored on purpose — never commit your real key to a public repository.
-
-4. Start the development server:
+4. Start server:
 
    ```
    npm run dev
