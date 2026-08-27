@@ -10,7 +10,7 @@ Wildfire Tracker is a client-side React application that retrieves current activ
 
 ### Key Features
 
-**Satellite Fire Information**: Uses data about or active fires detected by NASA FIRMS with the help of the VIIRS sensor
+**Satellite Fire Information**: Uses data about active fires detected by NASA FIRMS with the help of the VIIRS sensor
 
 **Interactive Map**: Includes the ability to pan, zoom, and click to get details about various fire detections
 
