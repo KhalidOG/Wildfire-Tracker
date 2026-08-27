@@ -1,3 +1,5 @@
+import styles from "./FilterPanel.module.css";
+
 const FilterPanel = ({ filters, onFiltersChange }) => {
   const handleConfidenceChange = (event) => {
     onFiltersChange({ ...filters, confidence: event.target.value });
@@ -12,13 +14,14 @@ const FilterPanel = ({ filters, onFiltersChange }) => {
   };
 
   return (
-    <div>
-      <h2>Filters</h2>
-
-      <div>
-        <label htmlFor="confidenceFilter">Confidence</label>
+    <div className={styles.filterPanel}>
+      <div className={styles.field}>
+        <label htmlFor="confidenceFilter" className={styles.label}>
+          Confidence
+        </label>
         <select
           id="confidenceFilter"
+          className={styles.select}
           value={filters.confidence}
           onChange={handleConfidenceChange}
         >
@@ -29,21 +32,27 @@ const FilterPanel = ({ filters, onFiltersChange }) => {
         </select>
       </div>
 
-      <div>
-        <label htmlFor="startDateFilter">Start date</label>
+      <div className={styles.field}>
+        <label htmlFor="startDateFilter" className={styles.label}>
+          Start date
+        </label>
         <input
           id="startDateFilter"
           type="date"
+          className={styles.dateInput}
           value={filters.startDate}
           onChange={handleStartDateChange}
         />
       </div>
 
-      <div>
-        <label htmlFor="endDateFilter">End date</label>
+      <div className={styles.field}>
+        <label htmlFor="endDateFilter" className={styles.label}>
+          End date
+        </label>
         <input
           id="endDateFilter"
           type="date"
+          className={styles.dateInput}
           value={filters.endDate}
           onChange={handleEndDateChange}
         />

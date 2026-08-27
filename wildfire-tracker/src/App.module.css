@@ -1,20 +1,10 @@
 .appLayout {
-  display: flex;
+  position: relative;
   height: 100vh;
   width: 100%;
 }
 
 .mapArea {
-  flex: 1;
-  height: 100%;
-}
-
-@media (max-width: 640px) {
-  .appLayout {
-    flex-direction: column;
-  }
-
-  .mapArea {
-    height: 60vh;
-  }
+  position: absolute;
+  inset: 0;
 }

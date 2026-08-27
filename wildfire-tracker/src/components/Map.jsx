@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
@@ -21,12 +21,14 @@ const Map = ({ wildfireEvents }) => {
     <MapContainer
       center={NORTH_AMERICA_CENTER}
       zoom={DEFAULT_ZOOM}
+      zoomControl={false}
       style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <ZoomControl position="topright" />
       {wildfireEvents.map((wildfireEvent) => (
         <EventMarker key={wildfireEvent.id} wildfireEvent={wildfireEvent} />
       ))}
