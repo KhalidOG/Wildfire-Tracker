@@ -71,7 +71,7 @@ Data Layer: The custom hook useWildfires - The raw CSV from FIRMS is obtained, p
 1. Clone the repository and open it in your terminal or IDE:
 
    ```
-   git clone <your-repo-url>
+   git clone https://github.com/KhalidOG/Wildfire-Tracker
    cd wildfire-tracker
    ```
 
