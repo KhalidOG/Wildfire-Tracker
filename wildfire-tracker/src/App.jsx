@@ -7,7 +7,7 @@ import filterEvents from "./utils/filterEvents";
 import styles from "./App.module.css";
 
 const DEFAULT_FILTERS = {
-  confidence: "all",
+  confidence: "high",
   startDate: "",
   endDate: "",
 };
