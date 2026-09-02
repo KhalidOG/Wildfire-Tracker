@@ -6,7 +6,7 @@ Client-Side Wildfire Detection Map Powered by NASA Satellite Data
 
 ## Overview
 
-Wildfire Tracker is a client-side React application that retrieves current active fire detections from NASA's FIRMS satellite feed and displays them on a live map of Canada. The application has no backend nor database. All requests are made from the browser directly to NASA's API and nothing is saved other than the current browsing session.
+Wildfire Tracker is a client-side React application that retrieves current active fire detections from NASA's FIRMS satellite feed and displays them on a live map of Canada and the US. The application has no backend nor database. All requests are made from the browser directly to NASA's API and nothing is saved other than the current browsing session.
 
 ![Wildfire Tracker screenshot](./screenshot.png)
 
@@ -18,7 +18,7 @@ Wildfire Tracker is a client-side React application that retrieves current activ
 
 **Filter by Confidence Level**: Users can filter fire detections based on confident levels (low, medium, high) as well as date range of fire events
 
-**Country-Wide Coverage**: Uses bounding box that covers Canada entirely including regions not covered by conventional fire trackers
+**Country-Wide Coverage**: Uses bounding box that covers Canada and the US entirely including regions not covered by conventional fire trackers
 
 **Frontend**: React (Vite), react-leaflet, Leaflet.js, CSS Modules
 **Data Source**: NASA FIRMS Area API (VIIRS_SNPP_NRT, CSV format)
